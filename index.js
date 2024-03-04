@@ -33,6 +33,22 @@ async function getDatabase(){
 
 getDatabase().then(() => console.log('Database connected')).catch((err) => console.error(err))
 
+process.on('unhandledRejection',(err)=>{
+  console.log(`Error: ${err.message}`);
+  console.log('Shutting down the server due to unhandled rejection error');
+  server.close(()=>{
+      process.exit(1);
+  })
+})
+
+process.on('uncaughtException',(err)=>{
+  console.log(`Error: ${err.message}`);
+  console.log('Shutting down the server due to uncaught exception error');
+  server.close(()=>{
+      process.exit(1);
+  })
+})
+
 app.use(errorMiddleware);
 
 //module.exports = app;
